@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سليم الأحمد | بوابة الخدمات الرقمية</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            /* ألوان تعبر عن التقنية والحداثة */
+            --primary-glow: #00f2ff; /* سماوي نيون */
+            --secondary-glow: #bd00ff; /* بنفسجي نيون */
+            --accent: #3b82f6; /* أزرق */
+            --text-main: #ffffff;
+            --text-secondary: #d1d5db;
+            --card-bg: rgba(20, 20, 35, 0.65); /* شفافية زجاجية */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            background-color: #0f0c29; /* لون احتياطي */
+            color: var(--text-main);
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            position: relative;
+            
+            /* --- كود منع تحديد النص --- */
+            -webkit-user-select: none; /* Safari */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* IE10+/Edge */
+            user-select: none; /* Standard */
+        }
+
+        /* السماح بتحديد النص فقط داخل الحقول إذا قمت بإضافتها مستقبلاً */
+        input, textarea {
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+        }
+
+        /* --- الخلفية الجديدة: تقنية، عالمية، متحركة --- */
+        .tech-background {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -2;
+            /* تدرج لوني عميق */
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            background-size: 400% 400%;
+            animation: gradientFlow 15s ease infinite;
+        }
+
+        /* عناصر مضيئة متحركة توحي بالبيانات والشبكات */
+        .tech-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.4;
+            z-index: -1;
+            animation: orbFloat 20s infinite alternate ease-in-out;
+        }
+        .orb-1 {
+            top: -10%; left: -10%; width: 50vw; height: 50vw;
+            background: var(--primary-glow);
+        }
+        .orb-2 {
+            bottom: -10%; right: -10%; width: 60vw; height: 60vw;
+            background: var(--secondary-glow);
+            animation-duration: 25s;
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes orbFloat {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, 50px) scale(1.1); }
+        }
+        /* -------------------------------------------------- */
+
+        .container {
+            width: 100%;
+            max-width: 950px;
+            padding: 50px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* الهيدر الشخصي */
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .img-container {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 25px;
+        }
+
+        .profile-pic {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            /* حدود مضيئة مزدوجة */
+            border: 3px solid transparent;
+            background: linear-gradient(#1a1a2e, #1a1a2e) padding-box,
+                        linear-gradient(135deg, var(--primary-glow), var(--secondary-glow)) border-box;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            pointer-events: none; /* منع سحب الصورة */
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            /* نص متدرج */
+            background: linear-gradient(to right, #fff, var(--primary-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(0, 242, 255, 0.3);
+        }
+
+        header .bio {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.7;
+            font-weight: 300;
+        }
+
+        /* نظام البطاقات */
+        .grid {
+            display: grid;
+            gap: 25px;
+        }
+
+        .card {
+            /* تأثير الزجاج الاحترافي */
+            background: var(--card-bg);
+            backdrop-filter: blur(20px); /* تغبيش الخلفية خلف البطاقة */
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        .card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(255,255,255,0.3);
+            box-shadow: 0 20px 40px rgba(0, 242, 255, 0.15);
+        }
+
+        /* تأثير لمعان إضافي عند التحويم */
+        .card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: 0.6s;
+            pointer-events: none;
+        }
+        .card:hover::after { left: 100%; }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .icon-box {
+            width: 55px;
+            height: 55px;
+            border-radius: 15px;
+            background: rgba(255,255,255,0.07);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            margin-left: 18px;
+            /* لون الأيقونة متدرج */
+            background: linear-gradient(135deg, var(--primary-glow), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: 0.3s;
+        }
+
+        .card h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .card p {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+
+        /* روابط الأزرار */
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .btn {
+            flex: 1;
+            min-width: 140px;
+            padding: 14px 20px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid transparent;
+        }
+
+        /* زر أساسي متوهج */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), var(--primary-glow));
+            color: #000; /* نص داكن لتباين أفضل مع الخلفية المضيئة */
+            box-shadow: 0 5px 15px rgba(0, 242, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            filter: brightness(1.15);
+            box-shadow: 0 10px 25px rgba(0, 242, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* زر ثانوي زجاجي */
+        .btn-secondary {
+            background: rgba(255,255,255,0.08);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.15);
+            border-color: var(--primary-glow);
+        }
+
+        /* تمييز بطاقة البرمجة */
+        .card.special {
+            border-color: rgba(189, 0, 255, 0.3); /* حدود بنفسجية */
+            background: linear-gradient(160deg, rgba(189, 0, 255, 0.1), var(--card-bg));
+        }
+        
+        .card.special .icon-box {
+            background: linear-gradient(135deg, var(--secondary-glow), var(--primary-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .btn-accent {
+            background: linear-gradient(135deg, var(--secondary-glow), var(--accent));
+            color: white;
+            width: 100%;
+            box-shadow: 0 5px 15px rgba(189, 0, 255, 0.3);
+        }
+        .btn-accent:hover {
+             box-shadow: 0 10px 25px rgba(189, 0, 255, 0.5);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 70px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* للتجاوب */
+        @media (min-width: 768px) {
+            .grid { grid-template-columns: repeat(2, 1fr); }
+            .card:last-child { grid-column: span 2; }
+            header h1 { font-size: 3rem; }
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;"> <div class="tech-background"></div>
+    <div class="tech-orb orb-1"></div>
+    <div class="tech-orb orb-2"></div>
+
+    <div class="container">
+        <header>
+            <div class="img-container">
+                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="سليم الأحمد" class="profile-pic">
+            </div>
+            <h1>سليم الأحمد</h1>
+            <p class="bio">بوابتك نحو العالم الرقمي: حلول سفر ذكية، تجارة إلكترونية متقدمة، إعلام يواكب الحدث، وبرمجيات تصنع الفارق.</p>
+        </header>
+
+        <div class="grid">
+            
+            <div class="card special" style="order: -1; grid-column: 1 / -1;">
+                <div class="card-header">
+                    <div class="icon-box"><i class="fa-solid fa-microchip"></i></div> <div>
+                        <h2>الحلول البرمجية والرقمية</h2>
+                        <span style="font-size: 0.85rem; color: var(--primary-glow); opacity: 0.8;">Tech & Development Solutions</span>
+                    </div>
+                </div>
+                <p>نحول أفكارك إلى واقع رقمي. تصميم وبرمجة مواقع ويب احترافية، صفحات هبوط (Landing Pages) عالية التحويل، وحلول تقنية مخصصة تدعم نمو أعمالك في العصر الرقمي.</p>
+                <div class="actions">
+                    <a href="https://wa.me/4917664957576?text=مرحباً، أود استشارة بخصوص مشروع برمجي" class="btn btn-accent">
+                        <i class="fab fa-whatsapp"></i> ابدأ مشروعك الرقمي الآن
+                    </a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="icon-box"><i class="fa-solid fa-earth-europe"></i></div>
+                    <h2>Urlaub - عالم السفر</h2>
+                </div>
+                <p>تجاوز الحدود. خدمات حجز طيران وفنادق احترافية بأفضل الأسعار التنافسية، مع دعم متواصل لضمان رحلة سلسة.</p>
+                <div class="actions">
+                    <a href="https://wa.me/4917664957576" class="btn btn-primary"><i class="fab fa-whatsapp"></i> تواصل مباشر</a>
+                    <a href="https://www.facebook.com/profile.php?id=61569379630284" class="btn btn-secondary"><i class="fab fa-facebook"></i></a>
+                    <a href="https://www.instagram.com/urlaubsde?igsh=MXIzb254ZTYxMWd3eQ==" class="btn btn-secondary"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="icon-box"><i class="fa-solid fa-tags"></i></div>
+                    <h2>PauseMarkt - التسوق الذكي</h2>
+                </div>
+                <p>اقتنِ الأفضل. نخبة عروض أمازون والماركات العالمية الموثوقة نضعها بين يديك يومياً بأسعار لا تقبل المنافسة.</p>
+                <div class="actions">
+                    <a href="https://whatsapp.com/channel/0029Vb6UIICLtOjGYWudNy42" class="btn btn-primary"><i class="fab fa-whatsapp"></i> قناة العروض</a>
+                    <a href="https://t.me/pause_x" class="btn btn-secondary"><i class="fab fa-telegram"></i> تليغرام</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="icon-box"><i class="fa-solid fa-satellite-dish"></i></div>
+                    <h2>باوزة الإخبارية</h2>
+                </div>
+                <p>المعلومة الدقيقة في وقتها. تغطية إعلامية شاملة وموثوقة لأهم المستجدات في ألمانيا والساحة الأوروبية.</p>
+                <div class="actions">
+                    <a href="https://www.facebook.com/profile.php?id=100088049490081" class="btn btn-secondary"><i class="fab fa-facebook"></i> فيسبوك</a>
+                    <a href="https://www.instagram.com/pausesef?igsh=MWNzMmxpeXk3YXd3Nw==" class="btn btn-secondary"><i class="fab fa-instagram"></i> انستغرام</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="icon-box"><i class="fa-solid fa-users-viewfinder"></i></div>
+                    <h2>مجتمع اللغة الألمانية</h2>
+                </div>
+                <p>تعلم وتفاعل. انضم إلى مجتمعنا التعليمي النشط لإتقان اللغة الألمانية عبر تبادل الخبرات والمصادر الموثوقة.</p>
+                <div class="actions">
+                    <a href="https://www.facebook.com/groups/1039663437633700/?ref=share_group_link" class="btn btn-primary" style="width: 100%"><i class="fab fa-facebook"></i> انضم للمجتمع التعليمي</a>
+                </div>
+            </div>
+
+        </div>
+
+        <footer>
+            <p>تم التصميم والتطوير بواسطة <a href="https://www.facebook.com/share/199JfNwN9e/" style="color: inherit; text-decoration: none;" target="_blank">سليم الأحمد</a> &copy; 2025 | رؤية رقمية متكاملة</p>
+        </footer>
+    </div>
+
+    <script>
+        // منع الزر الأيمن
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        // منع اختصارات لوحة المفاتيح مثل Ctrl+C, Ctrl+U, Ctrl+S, F12
+        document.onkeydown = function(e) {
+            if (e.ctrlKey && 
+               (e.keyCode === 67 || 
+                e.keyCode === 86 || 
+                e.keyCode === 85 || 
+                e.keyCode === 117)) {
+                return false;
+            } else {
+                return true;
+            }
+        };
+
+        // منع سحب الصور
+        document.querySelectorAll('img').forEach(img => {
+            img.addEventListener('dragstart', function(event) {
+                event.preventDefault();
+            });
+        });
+    </script>
+</body>
+</html>
