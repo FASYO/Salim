@@ -12,13 +12,13 @@
     <style>
         :root {
             /* ألوان مريحة للعين (Midnight Blue Palette) */
-            --bg-deep: #1a1a2e;       /* أزرق ليلي بدلاً من الأسود */
-            --bg-light: #16213e;      /* درجة أفتح للخلفية */
+            --bg-deep: #0a0a1a;       /* أغمق قليلاً لزيادة التباين مع الإضاءة */
+            --bg-light: #16213e;
             --primary: #4cc9f0;       /* سماوي هادئ */
             --secondary: #7209b7;     /* بنفسجي ملكي */
             --accent: #f72585;        /* وردي للتركيز */
             
-            --card-bg: rgba(30, 35, 60, 0.7); /* خلفية بطاقة نصف شفافة زرقاء */
+            --card-bg: rgba(20, 25, 50, 0.65); /* خلفية بطاقة أكثر شفافية قليلاً */
             --text-main: #e2e8f0;
             --text-muted: #94a3b8;
         }
@@ -42,28 +42,17 @@
             user-select: none;
         }
 
-        /* --- خلفية هادئة وجذابة --- */
+        /* --- خلفية ديناميكية تفاعلية (Canvas) --- */
         .background-fx {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
-            /* تدرج لوني مريح للعين */
-            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            background: linear-gradient(135deg, #020014 0%, #090925 100%);
         }
         
-        /* دوائر ضبابية ناعمة في الخلفية */
-        .blob {
+        #canvas-container {
             position: absolute;
-            filter: blur(80px);
-            opacity: 0.4;
-            animation: floatBlob 10s infinite alternate ease-in-out;
-        }
-        .blob-1 { top: -10%; right: -10%; width: 500px; height: 500px; background: var(--secondary); border-radius: 40% 60% 70% 30%; }
-        .blob-2 { bottom: -10%; left: -10%; width: 400px; height: 400px; background: var(--primary); border-radius: 60% 40% 30% 70%; animation-delay: -5s; }
-
-        @keyframes floatBlob {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(30px, 30px) scale(1.1); }
+            top: 0; left: 0; width: 100%; height: 100%;
         }
 
         /* --- الحاوية --- */
@@ -75,7 +64,7 @@
             z-index: 10;
         }
 
-        /* --- الهيدر والصورة (نفس الانيميشن الاحترافي) --- */
+        /* --- الهيدر والصورة --- */
         header {
             text-align: center;
             margin-bottom: 60px;
@@ -88,32 +77,42 @@
             margin: 0 auto 25px;
         }
 
+        /* انيميشن للصورة نفسها */
+        @keyframes imageBreathe {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03) translateY(-3px); }
+        }
+
         .profile-pic {
             width: 100%; height: 100%;
             border-radius: 50%;
             object-fit: cover;
-            border: 4px solid rgba(255,255,255,0.1);
+            border: 4px solid rgba(76, 201, 240, 0.2); /* حدود ملونة خفيفة */
             position: relative;
             z-index: 2;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            /* تطبيق حركة التنفس على الصورة */
+            animation: imageBreathe 4s ease-in-out infinite;
         }
 
         /* الحلقات الدوارة */
         .ring {
             position: absolute;
-            top: -10px; left: -10px; right: -10px; bottom: -10px;
+            top: -12px; left: -12px; right: -12px; bottom: -12px;
             border-radius: 50%;
-            border: 2px solid transparent;
+            border: 3px solid transparent;
             border-top-color: var(--primary);
             border-right-color: var(--secondary);
             animation: spin 3s linear infinite;
             z-index: 1;
+            filter: drop-shadow(0 0 10px var(--primary)); /* توهج للحلقة */
         }
         .ring::before {
             content: ''; position: absolute; top: 8px; left: 8px; right: 8px; bottom: 8px;
-            border-radius: 50%; border: 2px solid transparent;
+            border-radius: 50%; border: 3px solid transparent;
             border-bottom-color: var(--accent);
             animation: spin 5s linear infinite reverse;
+            filter: drop-shadow(0 0 8px var(--accent));
         }
 
         @keyframes spin { 100% { transform: rotate(360deg); } }
@@ -123,7 +122,7 @@
             font-weight: 700;
             margin-bottom: 15px;
             color: #fff;
-            text-shadow: 0 0 20px rgba(76, 201, 240, 0.4);
+            text-shadow: 0 0 25px rgba(76, 201, 240, 0.6);
         }
 
         header .bio {
@@ -132,21 +131,32 @@
             max-width: 600px;
             margin: 0 auto;
             line-height: 1.7;
+            background: rgba(10, 10, 30, 0.4); /* خلفية خفيفة للنص لزيادة القراءة */
+            padding: 15px;
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
         }
 
-        /* --- الشبكة والبطاقات --- */
+        /* --- الشبكة والبطاقات (تعديل الإضاءة والعزل) --- */
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
+            gap: 30px; /* زيادة المسافة قليلاً */
         }
 
         .card {
             background: var(--card-bg);
-            /* تأثير الزجاج */
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            /* تأثير الزجاج المحسن */
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            
+            /* حدود مضيئة بشكل افتراضي */
+            border: 1px solid rgba(76, 201, 240, 0.3); 
+            /* ظل وتوهج داخلي وخارجي خفيف لعزل البطاقة */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3),
+                        0 0 15px rgba(76, 201, 240, 0.1) inset,
+                        0 0 5px rgba(76, 201, 240, 0.2);
+            
             border-radius: 24px;
             padding: 30px;
             display: flex;
@@ -154,53 +164,57 @@
             position: relative;
             overflow: hidden;
             transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        /* التفاعل عند التحويم (Hover) - انسيابي وثابت */
+        /* التفاعل عند التحويم (Hover) - توهج قوي جداً */
         .card:hover {
-            transform: translateY(-8px); /* رفع بسيط */
-            background: rgba(40, 45, 75, 0.8);
-            border-color: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3), 
-                        0 0 20px rgba(76, 201, 240, 0.1); /* توهج خفيف */
+            transform: translateY(-10px) scale(1.02);
+            background: rgba(40, 45, 85, 0.8);
+            /* حدود ساطعة */
+            border-color: var(--primary);
+            /* توهج خارجي وداخلي قوي لعزل تام */
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 
+                        0 0 40px rgba(76, 201, 240, 0.5),
+                        0 0 15px rgba(76, 201, 240, 0.3) inset;
+            z-index: 5; /* رفع البطاقة فوق غيرها */
         }
 
         /* خط مضيء يمر عند التحويم */
         .card::after {
             content: "";
             position: absolute;
-            top: 0; left: -100%; width: 50%; height: 100%;
-            background: linear-gradient(to right, transparent, rgba(255,255,255,0.05), transparent);
+            top: 0; left: -150%; width: 100%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.15), transparent);
             transform: skewX(-25deg);
-            transition: 0.5s;
+            transition: 0.7s ease;
         }
         .card:hover::after {
             left: 150%;
-            transition: 0.7s ease-in-out;
         }
 
         .icon-box {
-            width: 55px; height: 55px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 16px;
+            width: 60px; height: 60px;
+            background: rgba(76, 201, 240, 0.1);
+            border-radius: 18px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             margin-bottom: 20px;
             color: var(--primary);
-            transition: 0.3s;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(76, 201, 240, 0.2);
         }
         
         .card:hover .icon-box {
             background: var(--primary);
-            color: #1a1a2e;
-            transform: scale(1.1);
+            color: #0a0a1a;
+            transform: scale(1.15) rotate(-5deg);
+            box-shadow: 0 0 20px rgba(76, 201, 240, 0.6);
         }
 
         .card h2 {
             font-size: 1.4rem;
             margin-bottom: 10px;
-            font-weight: 600;
+            font-weight: 700;
         }
 
         .card p {
@@ -212,12 +226,12 @@
         }
 
         /* --- الأزرار --- */
-        .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+        .actions { display: flex; gap: 12px; flex-wrap: wrap; }
 
         .btn {
             flex: 1;
             padding: 12px 15px;
-            border-radius: 12px;
+            border-radius: 14px;
             text-decoration: none;
             font-weight: 600;
             font-size: 0.9rem;
@@ -225,38 +239,62 @@
             transition: 0.3s;
             border: 1px solid transparent;
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
         }
 
         .btn-primary {
             background: linear-gradient(135deg, var(--primary), #3a86ff);
             color: #fff;
             box-shadow: 0 4px 15px rgba(76, 201, 240, 0.3);
+            border: 1px solid rgba(255,255,255,0.1);
         }
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(76, 201, 240, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(76, 201, 240, 0.5);
         }
 
         .btn-secondary {
-            background: rgba(255,255,255,0.05);
+            background: rgba(255,255,255,0.03);
             color: #fff;
-            border-color: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.15);
+            backdrop-filter: blur(5px);
         }
         .btn-secondary:hover {
             background: rgba(255,255,255,0.1);
             border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(76, 201, 240, 0.2) inset;
         }
 
         /* --- بطاقة البرمجة (في الأسفل) --- */
         .card.dev-card {
-            grid-column: 1 / -1; /* تأخذ العرض الكامل */
-            border-color: rgba(114, 9, 183, 0.3);
-            background: linear-gradient(145deg, rgba(114, 9, 183, 0.1), rgba(30, 35, 60, 0.8));
+            grid-column: 1 / -1;
+            /* حدود وتوهج وردي/بنفسجي للتميز */
+            border-color: rgba(247, 37, 133, 0.4);
+            background: linear-gradient(145deg, rgba(114, 9, 183, 0.15), rgba(30, 35, 60, 0.85));
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3),
+                        0 0 15px rgba(247, 37, 133, 0.15) inset,
+                        0 0 8px rgba(247, 37, 133, 0.3);
         }
         
-        .card.dev-card .icon-box { color: #f72585; background: rgba(247, 37, 133, 0.1); }
-        .card.dev-card:hover { box-shadow: 0 15px 40px rgba(114, 9, 183, 0.2); border-color: #f72585; }
-        .card.dev-card:hover .icon-box { background: #f72585; color: white; }
+        .card.dev-card .icon-box { 
+            color: var(--accent); 
+            background: rgba(247, 37, 133, 0.1);
+            border-color: rgba(247, 37, 133, 0.3);
+        }
+        
+        .card.dev-card:hover { 
+            /* توهج وردي قوي عند التحويم */
+            box-shadow: 0 20px 50px rgba(114, 9, 183, 0.4), 
+                        0 0 50px rgba(247, 37, 133, 0.6),
+                        0 0 20px rgba(247, 37, 133, 0.3) inset;
+            border-color: var(--accent); 
+        }
+        .card.dev-card:hover .icon-box { 
+            background: var(--accent); 
+            color: white; 
+            box-shadow: 0 0 25px rgba(247, 37, 133, 0.7);
+        }
 
         .btn-accent {
             width: 100%;
@@ -264,36 +302,39 @@
             color: white;
             padding: 14px;
             font-size: 1rem;
+            border: 1px solid rgba(255,255,255,0.1);
         }
         .btn-accent:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(247, 37, 133, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(247, 37, 133, 0.5);
         }
 
         /* --- الفوتر --- */
         footer {
-            margin-top: 50px;
+            margin-top: 60px;
             text-align: center;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: var(--text-muted);
-            opacity: 0.8;
-            padding-bottom: 20px;
+            padding: 20px;
+            background: rgba(10, 10, 30, 0.5);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.05);
         }
-        footer a { color: var(--primary); text-decoration: none; font-weight: 600; }
+        footer a { color: var(--primary); text-decoration: none; font-weight: 700; transition: 0.3s; }
+        footer a:hover { color: var(--accent); text-shadow: 0 0 10px var(--accent); }
 
         /* للتجاوب */
         @media (max-width: 768px) {
             header h1 { font-size: 2.2rem; }
-            .card.dev-card { grid-column: auto; } /* في الموبايل تعود لحجم عادي */
+            .card.dev-card { grid-column: auto; }
         }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
     <div class="background-fx">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
+        <canvas id="canvas-container"></canvas>
     </div>
 
     <div class="container">
@@ -367,14 +408,137 @@
     </div>
 
     <script>
-        // حماية المحتوى
+        // سكربت الخلفية التفاعلية (Particle Network)
+        const canvas = document.getElementById('canvas-container');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particlesArray;
+        let mouse = {
+            x: null,
+            y: null,
+            radius: (canvas.height/80) * (canvas.width/80)
+        }
+
+        window.addEventListener('mousemove',
+            function(event) {
+                mouse.x = event.x;
+                mouse.y = event.y;
+            }
+        );
+
+        // إنشاء الجزيئات
+        class Particle {
+            constructor(x, y, directionX, directionY, size, color) {
+                this.x = x;
+                this.y = y;
+                this.directionX = directionX;
+                this.directionY = directionY;
+                this.size = size;
+                this.color = color;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+            update() {
+                if (this.x > canvas.width || this.x < 0) {
+                    this.directionX = -this.directionX;
+                }
+                if (this.y > canvas.height || this.y < 0) {
+                    this.directionY = -this.directionY;
+                }
+
+                // التحقق من التصادم مع الماوس
+                let dx = mouse.x - this.x;
+                let dy = mouse.y - this.y;
+                let distance = Math.sqrt(dx*dx + dy*dy);
+                if (distance < mouse.radius + this.size){
+                    if (mouse.x < this.x && this.x < canvas.width - this.size * 10) {
+                        this.x += 10;
+                    }
+                    if (mouse.x > this.x && this.x > this.size * 10) {
+                        this.x -= 10;
+                    }
+                    if (mouse.y < this.y && this.y < canvas.height - this.size * 10) {
+                        this.y += 10;
+                    }
+                    if (mouse.y > this.y && this.y > this.size * 10) {
+                        this.y -= 10;
+                    }
+                }
+                this.x += this.directionX;
+                this.y += this.directionY;
+                this.draw();
+            }
+        }
+
+        function init() {
+            particlesArray = [];
+            let numberOfParticles = (canvas.height * canvas.width) / 9000;
+            for (let i = 0; i < numberOfParticles; i++) {
+                let size = (Math.random() * 3) + 1;
+                let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+                let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+                let directionX = (Math.random() * 2) - 1;
+                let directionY = (Math.random() * 2) - 1;
+                let color = 'rgba(76, 201, 240, 0.4)'; // لون الجزيئات (سماوي)
+
+                particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+            }
+        }
+
+        // رسم الخطوط بين الجزيئات
+        function connect(){
+            let opacityValue = 1;
+            for (let a = 0; a < particlesArray.length; a++) {
+                for (let b = a; b < particlesArray.length; b++) {
+                    let distance = (( particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x))
+                    + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+                    if (distance < (canvas.width/7) * (canvas.height/7)) {
+                        opacityValue = 1 - (distance/20000);
+                        ctx.strokeStyle = 'rgba(114, 9, 183,' + opacityValue + ')'; // لون الخطوط (بنفسجي)
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            ctx.clearRect(0,0,innerWidth, innerHeight);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+            }
+            connect();
+        }
+
+        init();
+        animate();
+
+        window.addEventListener('resize',
+            function(){
+                canvas.width = innerWidth;
+                canvas.height = innerHeight;
+                mouse.radius = ((canvas.height/80) * (canvas.height/80));
+                init();
+            }
+        );
+
+        // حماية المحتوى (موجود مسبقاً)
         document.addEventListener('contextmenu', e => e.preventDefault());
         document.onkeydown = function(e) {
             if (e.ctrlKey && (e.keyCode === 67 || e.keyCode === 86 || e.keyCode === 85 || e.keyCode === 123)) {
                 return false;
             }
         };
-        // منع سحب الصور
         document.querySelectorAll('img').forEach(img => {
             img.addEventListener('dragstart', e => e.preventDefault());
         });
