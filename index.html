@@ -11,7 +11,7 @@
     
     <style>
         :root {
-            /* --- تعريف الألوان للوضع الداكن (الافتراضي) --- */
+            /* --- تعريف الألوان للوضع الداكن --- */
             --bg-deep: #0a0a1a;
             --bg-gradient-start: #020014;
             --bg-gradient-end: #090925;
@@ -62,156 +62,95 @@
             align-items: center;
             flex-direction: column;
             position: relative;
-            
-            /* تم تقليل وقت الانتقال للخلفية ليتناسب مع سرعة الانفجار */
             transition: color 0.5s ease;
-
             -webkit-user-select: none;
             user-select: none;
         }
 
-        /* --- خلفية ديناميكية تفاعلية (Canvas) --- */
+        /* --- الخلفيات --- */
         .background-fx {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -2;
             background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
-            transition: background 0.5s ease;
+            transition: background 0.8s ease;
         }
         
         #canvas-container {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            transition: opacity 0.5s ease;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            transition: opacity 0.8s ease; z-index: -1;
         }
-        body.light-mode #canvas-container {
-            opacity: 0.7;
-        }
+        body.light-mode #canvas-container { opacity: 0.6; }
 
-        /* --- الحاوية --- */
         .container {
-            width: 100%;
-            max-width: 1000px;
-            padding: 60px 20px;
-            position: relative;
-            z-index: 10;
+            width: 100%; max-width: 1000px; padding: 60px 20px;
+            position: relative; z-index: 10;
         }
 
-        /* --- الهيدر والصورة --- */
-        header {
-            text-align: center;
-            margin-bottom: 60px;
-        }
+        /* --- الهيدر --- */
+        header { text-align: center; margin-bottom: 60px; }
 
         .profile-wrapper {
-            position: relative;
-            width: 150px;
-            height: 150px;
-            margin: 0 auto 25px;
-            cursor: pointer;
-            z-index: 20; /* أعلى من الانفجار */
-        }
-
-        /* عنصر الانفجار (The Wave Explosion) */
-        .theme-explosion {
-            position: fixed;
-            top: 0; left: 0;
-            width: 0; height: 0;
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 19; /* أسفل الصورة مباشرة ولكن يغطي المحتوى */
-            pointer-events: none;
-            transition: width 0.6s ease-in, height 0.6s ease-in;
-        }
-
-        @keyframes imageBreathe {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.03) translateY(-3px); }
-        }
-
-        @keyframes themeSwitchBurst {
-            0% { transform: scale(1); opacity: 1; border-width: 3px; }
-            100% { transform: scale(3); opacity: 0; border-width: 1px; }
+            position: relative; width: 150px; height: 150px;
+            margin: 0 auto 25px; cursor: pointer; z-index: 20;
         }
 
         .profile-pic {
-            width: 100%; height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid var(--primary);
-            position: relative;
-            z-index: 2;
+            width: 100%; height: 100%; border-radius: 50%; object-fit: cover;
+            border: 4px solid var(--primary); position: relative; z-index: 2;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            animation: imageBreathe 4s ease-in-out infinite;
             transition: border-color 0.5s ease, box-shadow 0.5s ease;
+            animation: imageBreathe 4s ease-in-out infinite;
+        }
+        @keyframes imageBreathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03) translateY(-3px); } }
+
+        /* --- تأثير الموجة السائلة (The Fluid Wave) --- */
+        .theme-wave {
+            position: fixed; top: 0; left: 0; width: 0; height: 0;
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+            background-color: var(--bg-deep);
+            transform: translate(-50%, -50%) rotate(0deg);
+            z-index: 0; pointer-events: none; opacity: 1;
+        }
+        @keyframes liquidExpand {
+            0% { width: 0; height: 0; opacity: 1; transform: translate(-50%, -50%) rotate(0deg); }
+            100% { width: 300vmax; height: 300vmax; opacity: 1; transform: translate(-50%, -50%) rotate(120deg); }
         }
         
-        body.light-mode .profile-pic {
-             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        /* حركة انجراف البطاقات */
+        @keyframes cardDrift {
+            0% { transform: translateY(0) scale(1) rotate(0); }
+            30% { transform: translateY(-30px) scale(1.05) rotate(2deg); box-shadow: 0 30px 60px rgba(0,0,0,0.3); }
+            60% { transform: translateY(10px) scale(1) rotate(-1deg); }
+            100% { transform: translateY(0) scale(1) rotate(0); }
         }
 
         .ring {
-            position: absolute;
-            top: -12px; left: -12px; right: -12px; bottom: -12px;
-            border-radius: 50%;
-            border: 3px solid transparent;
-            border-top-color: var(--primary);
-            border-right-color: var(--secondary);
-            animation: spin 3s linear infinite;
-            z-index: 1;
-            filter: drop-shadow(0 0 10px var(--primary));
-            transition: all 0.5s ease;
-        }
-        
-        .profile-wrapper.bursting .ring {
-            animation: themeSwitchBurst 0.6s ease-out forwards;
-        }
-
-        .ring::before {
-            content: ''; position: absolute; top: 8px; left: 8px; right: 8px; bottom: 8px;
+            position: absolute; top: -12px; left: -12px; right: -12px; bottom: -12px;
             border-radius: 50%; border: 3px solid transparent;
-            border-bottom-color: var(--accent);
-            animation: spin 5s linear infinite reverse;
-            filter: drop-shadow(0 0 8px var(--accent));
+            border-top-color: var(--primary); border-right-color: var(--secondary);
+            animation: spin 3s linear infinite; z-index: 1;
             transition: all 0.5s ease;
         }
-        
-        .profile-wrapper.bursting .ring::before {
-            opacity: 0;
-        }
-
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
         header h1 {
-            font-size: 2.8rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-            color: var(--text-main);
-            text-shadow: 0 0 25px rgba(76, 201, 240, 0.6);
-            transition: color 0.5s ease, text-shadow 0.5s ease;
+            font-size: 2.8rem; font-weight: 700; margin-bottom: 15px;
+            color: var(--text-main); text-shadow: 0 0 25px rgba(76, 201, 240, 0.6);
+            transition: color 0.5s ease;
         }
-        body.light-mode header h1 {
-             text-shadow: 0 0 25px rgba(0, 168, 232, 0.3);
-        }
+        body.light-mode header h1 { text-shadow: 0 0 25px rgba(0, 168, 232, 0.3); }
 
         header .bio {
-            color: var(--text-muted);
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin: 0 auto;
-            line-height: 1.7;
-            background: var(--bio-bg);
-            padding: 15px;
-            border-radius: 15px;
-            backdrop-filter: blur(5px);
+            color: var(--text-muted); font-size: 1.1rem; max-width: 600px;
+            margin: 0 auto; line-height: 1.7; background: var(--bio-bg);
+            padding: 15px; border-radius: 15px; backdrop-filter: blur(5px);
             transition: background-color 0.5s ease, color 0.5s ease;
         }
 
-        /* --- الشبكة والبطاقات --- */
+        /* --- الشبكة والبطاقات (إعادة الاحياء) --- */
         .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px; position: relative; z-index: 5;
         }
 
         .card {
@@ -219,41 +158,42 @@
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             border: 1px solid var(--card-border);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3),
-                        0 0 15px rgba(76, 201, 240, 0.1) inset;
-            border-radius: 24px;
-            padding: 30px;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.5s ease, border-color 0.5s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 15px rgba(76, 201, 240, 0.1) inset;
+            border-radius: 24px; padding: 30px;
+            display: flex; flex-direction: column; position: relative; overflow: hidden;
+            /* هام: إرجاع الانتقال السلس للحالة الطبيعية */
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.5s ease; 
         }
-        
         body.light-mode .card {
-             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08),
-                        0 0 15px rgba(0, 168, 232, 0.05) inset;
+             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08), 0 0 15px rgba(0, 168, 232, 0.05) inset;
         }
 
+        /* عندما تكون البطاقة في حالة انجراف (الموجة) */
+        .card.surfing {
+            animation: cardDrift 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+            /* نلغي التفاعل مؤقتاً أثناء الانجراف لمنع التعارض */
+            pointer-events: none; 
+        }
+
+        /* --- إعادة تفاعلات البطاقة (Hover Effects) --- */
         .card:hover {
             transform: translateY(-10px) scale(1.02);
             border-color: var(--primary);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 
-                        0 0 40px rgba(76, 201, 240, 0.4);
-            z-index: 5;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 40px rgba(76, 201, 240, 0.4);
+            z-index: 10;
         }
         body.light-mode .card:hover {
-             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 
-                        0 0 40px rgba(0, 168, 232, 0.2);
+             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 0 0 40px rgba(0, 168, 232, 0.2);
         }
 
+        /* --- إعادة شعاع الضوء اللامع (Shine Effect) --- */
         .card::after {
-            content: "";
-            position: absolute;
+            content: ""; position: absolute;
             top: 0; left: -150%; width: 100%; height: 100%;
             background: linear-gradient(to right, transparent, rgba(255,255,255,0.15), transparent);
             transform: skewX(-25deg);
             transition: 0.7s ease;
+            pointer-events: none; /* لضمان عدم حجب التفاعل */
         }
         body.light-mode .card::after {
              background: linear-gradient(to right, transparent, rgba(255,255,255,0.6), transparent);
@@ -262,154 +202,83 @@
             left: 150%;
         }
 
+        /* --- إعادة تفاعل الأيقونة (Icon Animations) --- */
         .icon-box {
-            width: 60px; height: 60px;
-            background: var(--icon-box-bg);
-            border-radius: 18px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.6rem;
-            margin-bottom: 20px;
-            color: var(--primary);
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.5s ease, color 0.5s ease;
+            width: 60px; height: 60px; background: var(--icon-box-bg);
+            border-radius: 18px; display: flex; align-items: center; justify-content: center;
+            font-size: 1.6rem; margin-bottom: 20px; color: var(--primary);
             border: 1px solid var(--card-border);
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.5s ease;
         }
         
+        /* تأثير الأيقونة عند التحويم على البطاقة */
         .card:hover .icon-box {
             background: var(--primary);
-            color: #0a0a1a;
+            color: #0a0a1a; /* لون داكن للأيقونة داخل الخلفية المضيئة */
             transform: scale(1.15) rotate(-5deg);
             box-shadow: 0 0 20px var(--primary);
             border-color: transparent;
         }
+        /* في الوضع الفاتح، الأيقونة تصبح بيضاء */
         body.light-mode .card:hover .icon-box {
              color: #ffffff;
         }
 
-        .card h2 {
-            font-size: 1.4rem;
-            margin-bottom: 10px;
-            font-weight: 700;
-            color: var(--text-main);
-            transition: color 0.5s ease;
-        }
+        .card h2 { font-size: 1.4rem; margin-bottom: 10px; color: var(--text-main); transition: color 0.5s ease; }
+        .card p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 25px; flex-grow: 1; transition: color 0.5s ease; }
 
-        .card p {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            line-height: 1.6;
-            margin-bottom: 25px;
-            flex-grow: 1;
-            transition: color 0.5s ease;
-        }
-
-        /* --- الأزرار --- */
         .actions { display: flex; gap: 12px; flex-wrap: wrap; }
-
         .btn {
-            flex: 1;
-            padding: 12px 15px;
-            border-radius: 14px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-            transition: 0.3s, background-color 0.5s ease;
-            border: 1px solid transparent;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
+            flex: 1; padding: 12px 15px; border-radius: 14px; text-decoration: none;
+            font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 8px;
+            transition: 0.3s; cursor: pointer; border: 1px solid transparent; overflow: hidden;
         }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), #3a86ff);
-            color: #fff;
+        .btn-primary { 
+            background: linear-gradient(135deg, var(--primary), #3a86ff); color: #fff; 
             box-shadow: 0 4px 15px rgba(76, 201, 240, 0.3);
-            border: 1px solid rgba(255,255,255,0.1);
         }
-        body.light-mode .btn-primary {
-             box-shadow: 0 4px 15px rgba(0, 168, 232, 0.3);
-        }
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px var(--primary);
-        }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 25px var(--primary); }
 
-        .btn-secondary {
-            background: var(--btn-secondary-bg);
-            color: var(--text-main);
-            border-color: var(--btn-secondary-border);
-            backdrop-filter: blur(5px);
-        }
-        .btn-secondary:hover {
-            background: var(--icon-box-bg);
-            border-color: var(--primary);
-        }
-
-        /* --- بطاقة البرمجة --- */
+        .btn-secondary { background: var(--btn-secondary-bg); color: var(--text-main); border-color: var(--btn-secondary-border); backdrop-filter: blur(5px); }
+        .btn-secondary:hover { background: var(--icon-box-bg); border-color: var(--primary); }
+        
+        /* بطاقة المطور */
         .card.dev-card {
             grid-column: 1 / -1;
-            border-color: rgba(247, 37, 133, 0.4);
             background: linear-gradient(145deg, rgba(114, 9, 183, 0.15), rgba(30, 35, 60, 0.85));
+            border-color: rgba(247, 37, 133, 0.4);
         }
         body.light-mode .card.dev-card {
             background: linear-gradient(145deg, rgba(114, 9, 183, 0.05), rgba(255, 255, 255, 0.9));
         }
         
-        .card.dev-card .icon-box { 
-            color: var(--accent); 
-            background: rgba(247, 37, 133, 0.1);
-            border-color: rgba(247, 37, 133, 0.3);
-        }
+        /* تخصيص أيقونة وتفاعل بطاقة المطور */
+        .card.dev-card .icon-box { color: var(--accent); background: rgba(247, 37, 133, 0.1); border-color: rgba(247, 37, 133, 0.3); }
         
         .card.dev-card:hover { 
             border-color: var(--accent);
-            box-shadow: 0 20px 50px rgba(114, 9, 183, 0.4), 
-                        0 0 50px rgba(247, 37, 133, 0.6);
+            box-shadow: 0 20px 50px rgba(114, 9, 183, 0.4), 0 0 50px rgba(247, 37, 133, 0.6);
         }
         body.light-mode .card.dev-card:hover {
-             box-shadow: 0 20px 50px rgba(114, 9, 183, 0.2), 
-                        0 0 50px rgba(247, 37, 133, 0.3);
+             box-shadow: 0 20px 50px rgba(114, 9, 183, 0.2), 0 0 50px rgba(247, 37, 133, 0.3);
         }
         
         .card.dev-card:hover .icon-box { 
-            background: var(--accent); 
-            color: white; 
-            box-shadow: 0 0 25px rgba(247, 37, 133, 0.7);
+            background: var(--accent); color: white; box-shadow: 0 0 25px rgba(247, 37, 133, 0.7);
         }
 
-        .btn-accent {
-            width: 100%;
-            background: linear-gradient(135deg, #f72585, #7209b7);
-            color: white;
-            padding: 14px;
-            font-size: 1rem;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .btn-accent:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 30px rgba(247, 37, 133, 0.5);
-        }
+        .btn-accent { width: 100%; background: linear-gradient(135deg, #f72585, #7209b7); color: white; padding: 14px; }
+        .btn-accent:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(247, 37, 133, 0.5); }
 
-        /* --- الفوتر --- */
         footer {
-            margin-top: 60px;
-            text-align: center;
-            font-size: 0.95rem;
-            color: var(--text-muted);
-            padding: 20px;
-            background: var(--footer-bg);
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--btn-secondary-border);
-            transition: all 0.5s ease;
+            margin-top: 60px; text-align: center; color: var(--text-muted);
+            padding: 20px; background: var(--footer-bg); border-radius: 20px;
+            backdrop-filter: blur(10px); border: 1px solid var(--btn-secondary-border);
         }
-        footer a { color: var(--primary); text-decoration: none; font-weight: 700; transition: 0.3s; }
+        footer a { color: var(--primary); text-decoration: none; }
         footer a:hover { color: var(--accent); text-shadow: 0 0 10px var(--accent); }
 
-        @media (max-width: 768px) {
-            header h1 { font-size: 2.2rem; }
-            .card.dev-card { grid-column: auto; }
-        }
+        @media (max-width: 768px) { .card.dev-card { grid-column: auto; } }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -428,7 +297,7 @@
             <p class="bio">بوابتك نحو العالم الرقمي: حلول سفر ذكية، تجارة إلكترونية متقدمة، إعلام يواكب الحدث، وبرمجيات تصنع الفارق.</p>
         </header>
 
-        <div class="grid">
+        <div class="grid" id="cards-grid">
             
             <div class="card">
                 <div class="icon-box"><i class="fa-solid fa-plane-departure"></i></div>
@@ -489,28 +358,20 @@
     </div>
 
     <script>
-        // --- إعدادات الكانفاس ---
+        // --- Canvas & Background Logic ---
         const canvas = document.getElementById('canvas-container');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
         let particlesArray;
-        let mouse = {
-            x: null,
-            y: null,
-            radius: (canvas.height/80) * (canvas.width/80)
-        }
+        let mouse = { x: null, y: null, radius: (canvas.height/80) * (canvas.width/80) };
 
-        window.addEventListener('mousemove', function(event) {
-            mouse.x = event.x;
-            mouse.y = event.y;
-        });
+        window.addEventListener('mousemove', (e) => { mouse.x = e.x; mouse.y = e.y; });
 
         let particleColorBase = 'rgba(76, 201, 240,';
         let lineColorBase = 'rgba(114, 9, 183,';
 
-        // دالة تحديث ألوان الكانفاس فقط
         function updateCanvasColors() {
             const isLightMode = document.body.classList.contains('light-mode');
             if (isLightMode) {
@@ -524,12 +385,7 @@
 
         class Particle {
             constructor(x, y, directionX, directionY, size) {
-                this.x = x;
-                this.y = y;
-                this.directionX = directionX;
-                this.directionY = directionY;
-                this.size = size;
-                this.baseAlpha = 0.4;
+                this.x = x; this.y = y; this.directionX = directionX; this.directionY = directionY; this.size = size; this.baseAlpha = 0.4;
             }
             draw() {
                 ctx.beginPath();
@@ -538,17 +394,17 @@
                 ctx.fill();
             }
             update() {
-                if (this.x > canvas.width || this.x < 0) { this.directionX = -this.directionX; }
-                if (this.y > canvas.height || this.y < 0) { this.directionY = -this.directionY; }
+                if (this.x > canvas.width || this.x < 0) this.directionX = -this.directionX;
+                if (this.y > canvas.height || this.y < 0) this.directionY = -this.directionY;
 
                 let dx = mouse.x - this.x;
                 let dy = mouse.y - this.y;
                 let distance = Math.sqrt(dx*dx + dy*dy);
                 if (distance < mouse.radius + this.size){
-                    if (mouse.x < this.x && this.x < canvas.width - this.size * 10) { this.x += 10; }
-                    if (mouse.x > this.x && this.x > this.size * 10) { this.x -= 10; }
-                    if (mouse.y < this.y && this.y < canvas.height - this.size * 10) { this.y += 10; }
-                    if (mouse.y > this.y && this.y > this.size * 10) { this.y -= 10; }
+                    if (mouse.x < this.x && this.x < canvas.width - this.size * 10) this.x += 10;
+                    if (mouse.x > this.x && this.x > this.size * 10) this.x -= 10;
+                    if (mouse.y < this.y && this.y < canvas.height - this.size * 10) this.y += 10;
+                    if (mouse.y > this.y && this.y > this.size * 10) this.y -= 10;
                 }
                 this.x += this.directionX;
                 this.y += this.directionY;
@@ -561,22 +417,19 @@
             let numberOfParticles = (canvas.height * canvas.width) / 9000;
             for (let i = 0; i < numberOfParticles; i++) {
                 let size = (Math.random() * 3) + 1;
-                let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
-                let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
-                let directionX = (Math.random() * 2) - 1;
-                let directionY = (Math.random() * 2) - 1;
-                particlesArray.push(new Particle(x, y, directionX, directionY, size));
+                particlesArray.push(new Particle(
+                    Math.random() * canvas.width, Math.random() * canvas.height,
+                    (Math.random() * 2) - 1, (Math.random() * 2) - 1, size
+                ));
             }
         }
 
         function connect(){
-            let opacityValue = 1;
             for (let a = 0; a < particlesArray.length; a++) {
                 for (let b = a; b < particlesArray.length; b++) {
-                    let distance = (( particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x))
-                    + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+                    let distance = (( particlesArray[a].x - particlesArray[b].x) ** 2) + ((particlesArray[a].y - particlesArray[b].y) ** 2);
                     if (distance < (canvas.width/7) * (canvas.height/7)) {
-                        opacityValue = 1 - (distance/20000);
+                        let opacityValue = 1 - (distance/20000);
                         ctx.strokeStyle = lineColorBase + opacityValue + ')';
                         ctx.lineWidth = 1;
                         ctx.beginPath();
@@ -591,111 +444,84 @@
         function animate() {
             requestAnimationFrame(animate);
             ctx.clearRect(0,0,innerWidth, innerHeight);
-            for (let i = 0; i < particlesArray.length; i++) {
-                particlesArray[i].update();
-            }
+            for (let i = 0; i < particlesArray.length; i++) { particlesArray[i].update(); }
             connect();
         }
 
-        init();
-        animate();
+        init(); animate();
+        window.addEventListener('resize', () => { canvas.width = innerWidth; canvas.height = innerHeight; init(); });
 
-        window.addEventListener('resize', function(){
-            canvas.width = innerWidth;
-            canvas.height = innerHeight;
-            mouse.radius = ((canvas.height/80) * (canvas.height/80));
-            init();
-        });
-
-        // ==========================================================
-        // --- منطق تبديل الثيم المطور (System Sync + Explosion) ---
-        // ==========================================================
+        // --- Logic: System Sync & Fluid Wave Animation ---
         
         const themeToggleBtn = document.getElementById('theme-toggle-btn');
         const bodyElement = document.body;
+        const cards = document.querySelectorAll('.card');
         
-        // 1. الاستماع لإعدادات النظام وتطبيقها تلقائياً
-        // ----------------------------------------------------------
         const systemThemeQuery = window.matchMedia('(prefers-color-scheme: light)');
-
         function applySystemTheme(e) {
-            // نطبق الثيم فقط إذا لم يقم المستخدم بتعديله يدوياً في هذه الجلسة (اختياري)
-            // هنا سنجعله يتبع النظام دائماً كقاعدة أساسية
-            if (e.matches) {
-                bodyElement.classList.add('light-mode');
-            } else {
-                bodyElement.classList.remove('light-mode');
-            }
+            if (e.matches) bodyElement.classList.add('light-mode');
+            else bodyElement.classList.remove('light-mode');
             updateCanvasColors();
         }
-
-        // تطبيق عند التحميل
         applySystemTheme(systemThemeQuery);
-        // الاستماع للتغييرات في الخلفية
         systemThemeQuery.addListener(applySystemTheme);
 
-
-        // 2. التبديل اليدوي مع تأثير الانفجار
-        // ----------------------------------------------------------
-        themeToggleBtn.addEventListener('click', function(e) {
-            // أ. تشغيل انيميشن الحلقة (Ring Burst) الموجود سابقاً
-            this.classList.add('bursting');
-            setTimeout(() => this.classList.remove('bursting'), 600);
-
-            // ب. تحديد الألوان المستهدفة للانفجار
-            const isCurrentlyLight = bodyElement.classList.contains('light-mode');
-            const targetColor = isCurrentlyLight ? '#0a0a1a' : '#f0f2f5'; // اللون الذي سنذهب إليه
-
-            // ج. إنشاء عنصر الانفجار (The Explosion Element)
-            const explosion = document.createElement('div');
-            explosion.classList.add('theme-explosion');
-            
-            // تحديد موقع الانفجار (منتصف صورة البروفايل)
+        themeToggleBtn.addEventListener('click', function() {
             const rect = this.getBoundingClientRect();
             const centerX = rect.left + rect.width / 2;
             const centerY = rect.top + rect.height / 2;
             
-            explosion.style.left = centerX + 'px';
-            explosion.style.top = centerY + 'px';
-            explosion.style.backgroundColor = targetColor; // لون الموجة هو لون الثيم القادم
-            
-            document.body.appendChild(explosion);
+            const isCurrentlyLight = bodyElement.classList.contains('light-mode');
+            const waveColor = isCurrentlyLight ? '#0a0a1a' : '#f0f2f5';
 
-            // د. تشغيل التوسع (Expansion)
-            // نستخدم setTimeout لضمان تطبيق الـ Styles الأولية قبل التحريك
+            const wave = document.createElement('div');
+            wave.classList.add('theme-wave');
+            wave.style.left = centerX + 'px';
+            wave.style.top = centerY + 'px';
+            wave.style.backgroundColor = waveColor;
+            
+            document.body.appendChild(wave);
+
             requestAnimationFrame(() => {
-                // حساب الحجم المطلوب لتغطية الشاشة (القطر)
-                const maxDimension = Math.max(window.innerWidth, window.innerHeight);
-                const size = maxDimension * 2.5; 
-                
-                explosion.style.width = size + 'px';
-                explosion.style.height = size + 'px';
+                wave.style.animation = 'liquidExpand 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards';
             });
 
-            // هـ. تبديل الكلاس الفعلي للـ Body في منتصف الانيميشن (عندما تغطي الموجة الشاشة)
+            cards.forEach(card => {
+                const cardRect = card.getBoundingClientRect();
+                const cardCenterX = cardRect.left + cardRect.width / 2;
+                const cardCenterY = cardRect.top + cardRect.height / 2;
+                
+                const distance = Math.sqrt(
+                    Math.pow(cardCenterX - centerX, 2) + 
+                    Math.pow(cardCenterY - centerY, 2)
+                );
+
+                const delay = distance / 800; 
+
+                card.style.animationDelay = `${delay}s`;
+                card.classList.add('surfing');
+                
+                setTimeout(() => {
+                    card.classList.remove('surfing');
+                    card.style.animationDelay = '0s';
+                }, 2000);
+            });
+
             setTimeout(() => {
                 bodyElement.classList.toggle('light-mode');
                 updateCanvasColors();
-            }, 300); // ننتظر قليلاً حتى تغطي الموجة الشاشة
+            }, 600); 
 
-            // و. تنظيف العنصر بعد انتهاء الحركة
             setTimeout(() => {
-                // تلاشي الموجة لكشف الثيم الجديد (الذي أصبح نفس لون الموجة)
-                explosion.style.opacity = '0';
-                setTimeout(() => explosion.remove(), 200);
-            }, 600);
+                wave.style.transition = 'opacity 0.5s';
+                wave.style.opacity = '0';
+                setTimeout(() => wave.remove(), 500);
+            }, 1500);
         });
 
-        // حماية المحتوى
         document.addEventListener('contextmenu', e => e.preventDefault());
-        document.onkeydown = function(e) {
-            if (e.ctrlKey && (e.keyCode === 67 || e.keyCode === 86 || e.keyCode === 85 || e.keyCode === 123)) {
-                return false;
-            }
-        };
-        document.querySelectorAll('img').forEach(img => {
-            img.addEventListener('dragstart', e => e.preventDefault());
-        });
+        document.onkeydown = e => { if(e.ctrlKey && [67,86,85,123].includes(e.keyCode)) return false; };
+        document.querySelectorAll('img').forEach(img => img.addEventListener('dragstart', e => e.preventDefault()));
     </script>
 </body>
 </html>
